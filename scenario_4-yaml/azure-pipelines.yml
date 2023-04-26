@@ -1,0 +1,55 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ServiceConnectionName: '******'
+  EnvironmentType: '******'
+  ResourceGroupName: '*****'
+  EnvironmentConfigType: '*****'
+  ResourceGroupLocation: '*****'
+
+stages:
+  - stage: Build
+    jobs:
+    - job: Build
+      steps:
+        - task: AzureCLI@2
+          displayName: 'Build Bicep Artifact'
+          inputs:
+            azureSubscription: $(ServiceConnectionName)
+            scriptType: 'pscore'
+            scriptLocation: 'inlineScript'
+            inlineScript: 'az bicep build --file ./scenario_4-yaml/main.bicep'
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish artifact in pipeline'
+          inputs:
+            PathtoPublish: '$(Build.SourcesDirectory)/scenario_4-yaml/main.json'
+            ArtifactName: 'finishedTemplate'
+            publishLocation: 'Container'
+
+  - stage: deploy
+    jobs:
+      - deployment: biceptoAzure
+        displayName: 'Deploy bicep to Azure'
+        environment: 'AzureDeployment'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: AzureCLI@2
+                  displayName: 'deploy bicep template'
+                  inputs:
+                    azureSubscription: $(ServiceConnectionName)
+                    scriptType: 'pscore'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      az group create --name $(ResourceGroupName) --location $(ResourceGroupLocation)
+                      az deployment group create `
+                      --resource-group $(ResourceGroupName) `
+                      --parameters envConfigType=$(EnvironmentConfigType) `
+                      --template-file $(Build.SourcesDirectory)/scenario_4-yaml/main.bicep

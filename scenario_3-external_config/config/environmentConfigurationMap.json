@@ -1,0 +1,49 @@
+{
+	"production": {},
+	"test": {},
+	"dev": {
+		"azFunctionApp": {
+			"identity": {
+				"type": "SystemAssigned"
+			},
+			"kind": "functionapp",
+			"node": {
+				"workerRuntime": "node",
+				"version": "~18"
+			},
+			"properties": {
+				"clientAffinityEnabled": false,
+				"httpsOnly": true,
+				"publicNetworkAccess": "Enabled",
+				"siteConfig": {
+					"cors": {
+						"allowedOrigins": [
+							"*"
+						]
+					},
+					"ftpsState": "FtpsOnly",
+					"minTlsVersion": "1.2",
+					"netFrameworkVersion": "v6.0",
+					"use32BitWorkerProcess": true
+				}
+			}
+		},
+		"azHostingPlan": {
+			"kind": "windows",
+			"sku": {
+				"name": "Y1",
+				"tier": "Dynamic"
+			}
+		},
+		"azStorageAccount": {
+			"kind": "StorageV2",
+			"properties": {
+				"supportsHttpsTrafficOnly" : true,
+				"minimumTlsVersion": "TLS1_2"
+			},
+			"sku": {
+				"name": "Standard_LRS"
+			}
+		}
+	}
+}
