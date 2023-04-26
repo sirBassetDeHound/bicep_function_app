@@ -6,7 +6,6 @@ dated:April-24-2023
 
 # Developing Azure functions using reusable Bicep modules
 
-
 ## The benefits of infrastructure as code
 Infrastructure as code (IaC) is the practice of a creating a model in code to generate an identical environment each time it is run, reducing human error, enforcing business best practice, and allowing teams that use it to innovate and deploy needed infrastructure faster and safer than manually generating the resources when needed. IaC is a fundamental concept utilizing DevOps methodologies to automate the validation, build and deployment of infrastructure in a way that closes the gap between development teams and IT operations teams. 
 Using IaC we can ensure that environments created are appreciative of cost, using environment config, reusable, using modules, and require minimal human input, using CI/CD or cmd line deployment. With this approach we can be confident that teams wishing to use our templates can do so in a business approved way giving them confidence to take innovation into the cloud or rapidly deploy new infrastructure to an existing environment.
